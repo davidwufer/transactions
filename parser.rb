@@ -2,8 +2,8 @@ module Transaction
   class Parser
     attr_reader :path
 
-    def initialize(path)
-      @path = path
+    def initialize(args={})
+      @path = args[:filepath]
     end
 
     def data
