@@ -48,6 +48,35 @@ describe Graph do
     it "removes an edge if the amount reaches 0" do
       graph.add_edge("Angela", "David", 200)
       graph.has_edge?("David", "Angela"). should be_false
+      graph.has_edge?("Angela", "David"). should be_false
+    end
+
+    it "reverses an edge if the amount added exceeds the negative of the amount already there" do
+      graph.add_edge("Angela", "David", 400)
+      graph.owed_amount("David", "Angela").should == -200
+      graph.owed_amount("Angela", "David").should == 200
+    end
+
+    describe "#remove_edge" do
+      it "removes an edge" do
+        graph.remove_edge("David", "Angela")
+        graph.has_edge?("David", "Angela").should be_false
+        graph.owed_amount("David", "Angela").should == 0
+      end
+
+      it "removes a negative edge" do
+        graph.remove_edge("Angela", "David")
+        graph.has_edge?("David", "Angela").should be_false
+        graph.owed_amount("David", "Angela").should == 0
+      end
+
+      it "returns the owed amount" do
+        graph_remove_edge("David", "Angela").should == 200
+      end
+
+      it "returns the owed amount for a negative edge" do
+        graph_remove_edge("Angela", "David").should == -200
+      end
     end
   end
 end
