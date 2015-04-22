@@ -24,11 +24,7 @@ module Transaction
       nodes[owed][ower] -= amount
 
       if nodes[ower][owed].zero?
-        nodes[ower].delete(owed)
-      end
-
-      if nodes[owed][ower].zero?
-        nodes[owed].delete(ower)
+        remove_edge(ower, owed)
       end
     end
 
