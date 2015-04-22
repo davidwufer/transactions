@@ -26,15 +26,27 @@ describe Graph do
     it "returns the right amount for nonexistent owed people" do
       expect(graph.owed_amount("David", "Janet")).to eq(0)
     end
+
+    it "returns the right connected node" do
+      expect(graph.connected_nodes("David")).to eq(["Angela"])
+    end
   end
 
   describe "Graph modification" do
-    it "adds a new edge with the right amount" do
-      graph.add_node("Baran")
+    describe "#add_edge" do
+      before(:each) do
+        graph.add_node("Baran")
+        graph.add_edge("David", "Baran", 200)
+      end
 
-      graph.add_edge("David", "Baran", 200)
-      expect(graph.owed_amount("David", "Baran")).to eq(200)
-      expect(graph.owed_amount("Baran", "David")).to eq(-200)
+      it "adds a new edge with the right amount" do
+        expect(graph.owed_amount("David", "Baran")).to eq(200)
+        expect(graph.owed_amount("Baran", "David")).to eq(-200)
+      end
+
+      it "adds it to the connected nodes" do
+        expect(graph.connected_nodes("David").sort).to eq(["Angela", "Baran"].sort)
+      end
     end
 
     it "adds to an existing edge with the right amount" do

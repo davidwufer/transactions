@@ -19,6 +19,10 @@ module Transaction
       nodes[node] = Hash.new(0) unless nodes.has_key?(node)
     end
 
+    def connected_nodes(node)
+      nodes[node].keys
+    end
+
     def add_edge(ower, owed, amount)
       nodes[ower][owed] += amount
       nodes[owed][ower] -= amount
@@ -52,6 +56,8 @@ module Transaction
   end
 
   class Runner
+    require 'set'
+
     attr_reader :filepath
 
     def initialize(args={})
@@ -61,6 +67,20 @@ module Transaction
     def results
       parser = Parser.new(filepath: filepath)
       graph = Graph.new(transaction_data: parser.data)
+
+      # Algorithm time!
+      # Pick a node
+      # If < 1 edges, then yay
+      # Else for the remaining edges, create indirect edges through edge #1
+      # Move onto the next node, making sure not to look at the nodes already looked at
+      # When all nodes have been looked at, then you're done!
+
+      visited_nodes = Set.new()
+      graph.nodes.each do |node|
+        relevant_connected_nodes = graph.connected_nodes(node).filter
+
+        visited_nodes << node
+      end
     end
   end
 end
