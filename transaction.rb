@@ -6,32 +6,45 @@ require './transaction_data'
 require './graph'
 
 module Transaction
-  class Calculator
-    require 'set'
-
-    attr_reader :filepath
-
+  class Runner
     def initialize(args={})
-      @filepath = args[:filepath]
-    end
-
-    def results
+      filepath = args[:filepath]
       parser = Parser.new(filepath: filepath)
       graph = Graph.new(transaction_data: parser.data)
 
-      # Algorithm time!
-      # Else for the remaining edges, create indirect edges through edge #1
-      # Move onto the next node, making sure not to look at the nodes already looked at
-      # When all nodes have been looked at, then you're done!
+      @calculator = Calculator.new(graph: graph)
+    end
+  end
+
+
+  class Calculator
+    require 'set'
+
+    attr_reader :graph
+
+    def initialize(args={})
+      @graph = args[:graph]
+    end
+
+    def results
+      # Algorithm:
+      # For each node, look at all its connected, unvisited nodes
+      # If the number of these nodes is <= 1, then continue
+      # Else choose one connected, invisited node as an intermediate node
+      # and redirect all other edges through this node by the following:
+      #  A: Current Node
+      #  B: Intermediate Node (also connected to A)
+      #  C: Node connected to A with amount X
+      #  Create/Add to an edge between A and B using value X
+      #  Create/Add to an edge between B and C using value X
 
       visited_nodes = Set.new()
-      graph.nodes.each do |node|
+      # graph.nodes.keys should really be abstracted
+      graph.nodes.keys.each do |node|
         relevant_connected_nodes = graph.connected_nodes(node).reject {|node| visited_nodes.include?(node)}
 
-        # If < 1 edges, then move on
-        continue unless relevant_connected_nodes.size > 1
+        next unless relevant_connected_nodes.size > 1
 
-        # I don't know what to call this, but redirect all edges through this one
         intermediate_node = relevant_connected_nodes.pop
         relevant_connected_nodes.each do |relevant_connected_node|
           amount = graph.remove_edge(node, relevant_connected_node)
@@ -43,6 +56,7 @@ module Transaction
         visited_nodes << node
       end
 
+      graph
     end
   end
 end
