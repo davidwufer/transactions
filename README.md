@@ -1,1 +1,1 @@
-Run `ruby runner <filepath>`
+Run `ruby runner.rb <filepath>`

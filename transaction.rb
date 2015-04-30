@@ -31,6 +31,11 @@ module Transaction
       @graph = args[:graph]
     end
 
+    # TODO: Needs to take into account the amount that one is owed :(
+    def total_owed_amount(ower)
+      return data[ower] ? data[ower].values.reduce(:+) : 0
+    end
+
     def to_s
       data.each_pair do |ower, owed_people_data|
         owed_people_data.each_pair do |owed, amount|
@@ -41,6 +46,8 @@ module Transaction
     end
 
     def data
+      return @data if @data
+
       filtered_data = {}
       graph.nodes.each_pair do |ower, owed_people_data|
         filtered_owed_people_data = owed_people_data.select {|owed, amount| amount > 0}
@@ -48,7 +55,7 @@ module Transaction
           filtered_data[ower] = filtered_owed_people_data
         end
       end
-      filtered_data
+      @data = filtered_data
     end
   end
 

@@ -11,6 +11,7 @@ module Transaction
 
     def add_node(node)
       nodes[node] = Hash.new(0) unless nodes.has_key?(node)
+      self
     end
 
     def outgoing_nodes(node)
@@ -28,6 +29,7 @@ module Transaction
       if nodes[ower][owed].zero?
         remove_edge(ower, owed)
       end
+      self
     end
 
     def remove_edge(owed, ower)

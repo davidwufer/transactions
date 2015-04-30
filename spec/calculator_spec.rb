@@ -27,5 +27,22 @@ describe Calculator do
     expect(calculated_graph.owed_amount("Steven", "Amy")).to eq(200)
   end
 
-  it "calculates the correct graph for three nodes starting with three edges"
+  # TODO: This isn't really accurate
+  it "calculates the correct amount for the Disney World example that inspired this project" do
+    graph = Graph.new
+    graph.add_node("P").add_node("B").add_node("D").add_node("J")
+
+    graph.add_edge("J", "P", 48.82)
+    graph.add_edge("J", "B", 12)
+    graph.add_edge("B", "P", 267.04)
+    graph.add_edge("D", "P", 46.17)
+    graph.add_edge("D", "J", 197.57)
+    graph.add_edge("D", "B", 9)
+
+    results = Calculator.new(graph: graph).results
+    # expect(results.total_owed_amount("P")).to eq(0)
+    # expect(results.total_owed_amount("B")).to eq(0)
+    # expect(results.total_owed_amount("D")).to eq(0)
+    # expect(results.total_owed_amount("J")).to eq(0)
+  end
 end
