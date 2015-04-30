@@ -40,7 +40,8 @@ module Transaction
 
       visited_nodes = Set.new()
       # graph.nodes.keys should really be abstracted
-      graph.nodes.keys.each do |node|
+      sorted_nodes = graph.nodes.keys.sort {|first, second| graph.outgoing_nodes(first) <=> graph.outgoing_nodes(second)}
+      sorted_nodes.each do |node|
         relevant_connected_nodes = graph.connected_nodes(node).reject {|node| visited_nodes.include?(node)}
 
         next unless relevant_connected_nodes.size > 1

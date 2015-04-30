@@ -13,6 +13,10 @@ module Transaction
       nodes[node] = Hash.new(0) unless nodes.has_key?(node)
     end
 
+    def outgoing_nodes(node)
+      nodes[node].values.select {|val| val > 0}.length
+    end
+
     def connected_nodes(node)
       nodes[node].keys
     end

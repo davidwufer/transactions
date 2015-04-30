@@ -30,6 +30,14 @@ describe Graph do
     it "returns the right connected node" do
       expect(graph.connected_nodes("David")).to eq(["Angela"])
     end
+
+    it "returns the right number of outgoing nodes when one exists" do
+      expect(graph.outgoing_nodes("David")).to eq(1)
+    end
+
+    it "returns the right number of outgoing nodes when one does not exist" do
+      expect(graph.outgoing_nodes("Angela")).to eq(0)
+    end
   end
 
   describe "Graph modification" do
