@@ -14,6 +14,7 @@ describe Calculator do
     expect(calculated_graph.owed_amount("Steven", "Crystal")).to eq(100)
   end
 
+  # TODO: This will be another algorithm
   it "minimizes the amount of work people without existing debts have to do" do
     graph = Graph.new
     %w[Steven Crystal Amy].each {|name| graph.add_node(name)}
@@ -22,7 +23,6 @@ describe Calculator do
 
     calculator = Calculator.new(graph: graph)
     calculated_graph = calculator.results
-    binding.pry
     expect(calculated_graph.owed_amount("Steven", "Crystal")).to eq(100)
     expect(calculated_graph.owed_amount("Steven", "Amy")).to eq(200)
   end

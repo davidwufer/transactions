@@ -18,7 +18,7 @@ module Transaction
           next if line.strip.empty?
           ower, owed, amount = line.match(/\s*(\w+)\s*->\s*(\w+)\s*\$(\d+\.?\d*)/).captures
 
-          read_data << TransactionData.new(ower: ower, owed: owed, amount: amount)
+          read_data << TransactionData.new(ower: ower, owed: owed, amount: amount.to_f)
         end
 
         read_data
